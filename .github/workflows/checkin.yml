@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Cache node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
@@ -37,6 +37,14 @@ jobs:
           echo "[*] Waiting for $delay seconds..."
           sleep $delay
           node main.js
+            
+      - name: Cleanup old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          keep_minimum_runs: 9
+          workflow_id: ${{ github.workflow }}
           
       - name: Notify on failure
         if: failure()
@@ -44,7 +52,7 @@ jobs:
         with:
           script: |
             core.warning('Main job failed!')
-          
+            
   keepalive-job:
     if: github.event_name == 'schedule'
     name: Keepalive Workflow
@@ -52,19 +60,8 @@ jobs:
     permissions:
       actions: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
       - name: Run keepalive
         uses: fany0r/gh-workflow-keepalive@v1
         with:
           use_api: false
           
-      - name: Cleanup old workflow runs
-        if: success()
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          keep_minimum_runs: 9
-          workflow_id: ${{ github.workflow }}
