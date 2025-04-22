@@ -1,9 +1,9 @@
 name: PEDIY-Attendance
 on:
   schedule:
-    - cron: '36 7 * * *'  # UTC 时间的 7:36，对应北京时间的 15:36
+    - cron: '36 7 * * *'
   workflow_dispatch:
-  
+
 jobs:
   main-job:
     name: Main Job
@@ -13,13 +13,11 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Cache node modules
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-            
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -27,7 +25,7 @@ jobs:
           cache: 'npm'
           
       - name: Install dependencies
-        run: npm ci
+        run: npm ci  # 使用ci保持一致性
         
       - name: Random delay in CheckIn
         env:
