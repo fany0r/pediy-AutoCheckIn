@@ -5,56 +5,56 @@ on:
   workflow_dispatch:
 
 jobs:
-  main-job:
-    name: Main Job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # main-job:
+  #   name: Main Job
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
         
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+  #     - name: Cache node modules
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.npm
+  #         key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 16
-          cache: 'npm'
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 16
+  #         cache: 'npm'
           
-      - name: Install dependencies
-        run: npm ci  # 使用ci保持一致性
+  #     - name: Install dependencies
+  #       run: npm ci  # 使用ci保持一致性
         
-      - name: Random delay in CheckIn
-        env:
-          PUSHPLUS: ${{ secrets.PUSHPLUS }}
-          COOKIE: ${{ secrets.COOKIE }}
-        run: |
-          delays=(1 2 3 4)
-          delay=$((${delays[RANDOM % ${#delays[@]}]} * 60))
-          echo "[*] Waiting for $delay seconds..."
-          sleep $delay
-          node main.js
+  #     - name: Random delay in CheckIn
+  #       env:
+  #         PUSHPLUS: ${{ secrets.PUSHPLUS }}
+  #         COOKIE: ${{ secrets.COOKIE }}
+  #       run: |
+  #         delays=(1 2 3 4)
+  #         delay=$((${delays[RANDOM % ${#delays[@]}]} * 60))
+  #         echo "[*] Waiting for $delay seconds..."
+  #         sleep $delay
+  #         node main.js
             
-      - name: Cleanup old workflow runs
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          keep_minimum_runs: 9
-          workflow_id: ${{ github.workflow }}
+  #     - name: Cleanup old workflow runs
+  #       uses: Mattraks/delete-workflow-runs@v2
+  #       with:
+  #         token: ${{ github.token }}
+  #         repository: ${{ github.repository }}
+  #         keep_minimum_runs: 9
+  #         workflow_id: ${{ github.workflow }}
           
-      - name: Notify on failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.warning('Main job failed!')
+  #     - name: Notify on failure
+  #       if: failure()
+  #       uses: actions/github-script@v7
+  #       with:
+  #         script: |
+  #           core.warning('Main job failed!')
             
   keepalive-job:
-    if: github.event_name == 'schedule'
+    # if: github.event_name == 'schedule'
     name: Keepalive Workflow
     runs-on: ubuntu-latest
     permissions:
