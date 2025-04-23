@@ -1,7 +1,7 @@
 name: PEDIY-Attendance
 on:
   schedule:
-    - cron: '36 7 * * *'
+    - cron: '26 12 * * *'
   workflow_dispatch:
 
 jobs:
@@ -62,6 +62,3 @@ jobs:
     steps:
       - name: Run keepalive
         uses: fany0r/gh-workflow-keepalive@v1
-        with:
-          use_api: false
-          
