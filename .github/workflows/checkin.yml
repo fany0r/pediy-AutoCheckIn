@@ -38,13 +38,13 @@ jobs:
           sleep $delay
           node main.js
             
-      - name: Cleanup old workflow runs
+      - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
-          keep_minimum_runs: 9
-          workflow_id: ${{ github.workflow }}
+          retain_days: 30
+          keep_minimum_runs: 6
           
       - name: Notify on failure
         if: failure()
