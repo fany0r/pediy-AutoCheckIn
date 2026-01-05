@@ -36,6 +36,9 @@ const checkIn = async () => {
             console.log(`[+] 🎉🎉🎉已完成签到，获得${msg}雪币`);
         } else if (msg == '您今日已签到成功'){
             console.warn(`[!] ❗ 亲，您今天已签到，无需重复签到哈~`);
+        } else {
+            console.error(`[!] 签到失败：${msg}`);
+            process.exit(1); // 让 GitHub Actions 任务失败，触发Notify on failure
         }
     })
     .catch(error => {
